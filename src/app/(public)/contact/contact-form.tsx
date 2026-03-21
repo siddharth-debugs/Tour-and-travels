@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { createContactInquiry } from "@/app/actions/contact";
 
 export function ContactForm() {
   const [isPending, startTransition] = useTransition();
@@ -38,14 +39,17 @@ export function ContactForm() {
       return;
     }
 
-    startTransition(() => {
-      // Placeholder — server action wired in a later task
-      setTimeout(() => {
+    startTransition(async () => {
+      const result = await createContactInquiry(form);
+
+      if ("success" in result && result.success) {
         setSubmitted(true);
         toast.success("Message sent successfully!", {
           description: "We'll get back to you within 24 hours.",
         });
-      }, 800);
+      } else if ("error" in result) {
+        toast.error(result.error || "Something went wrong. Please try again.");
+      }
     });
   };
 

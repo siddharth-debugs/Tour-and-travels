@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createCabBooking } from "@/app/actions/cab-booking";
 
 interface CabType {
   id: string;
@@ -28,6 +29,7 @@ interface CabBookingFormProps {
 export function CabBookingForm({ cabTypes }: CabBookingFormProps) {
   const [isPending, startTransition] = useTransition();
   const [submitted, setSubmitted] = useState(false);
+  const [referenceNo, setReferenceNo] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -53,14 +55,21 @@ export function CabBookingForm({ cabTypes }: CabBookingFormProps) {
       return;
     }
 
-    startTransition(() => {
-      // Placeholder — server action wired in Task 14
-      setTimeout(() => {
+    startTransition(async () => {
+      const result = await createCabBooking({
+        ...form,
+        date: new Date(form.date),
+      });
+
+      if ("success" in result && result.success) {
+        setReferenceNo(result.referenceNo);
         setSubmitted(true);
         toast.success("Cab booking request sent!", {
           description: "We'll confirm your booking within 2 hours.",
         });
-      }, 800);
+      } else if ("error" in result) {
+        toast.error(result.error || "Something went wrong. Please try again.");
+      }
     });
   };
 
@@ -71,6 +80,14 @@ export function CabBookingForm({ cabTypes }: CabBookingFormProps) {
           <CheckCircle2 className="size-8 text-green-600" />
         </div>
         <h3 className="text-xl font-bold text-foreground">Booking Request Sent!</h3>
+        {referenceNo && (
+          <div className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
+            <p className="text-xs text-muted-foreground mb-0.5">Your booking reference</p>
+            <span className="text-base font-mono font-semibold text-primary">
+              {referenceNo}
+            </span>
+          </div>
+        )}
         <p className="text-muted-foreground max-w-sm">
           Thank you! Our team will confirm your cab booking within 2 hours. We'll reach out on{" "}
           <span className="font-medium text-foreground">{form.email}</span>.
@@ -79,6 +96,7 @@ export function CabBookingForm({ cabTypes }: CabBookingFormProps) {
           variant="outline"
           onClick={() => {
             setSubmitted(false);
+            setReferenceNo(null);
             setForm({ name: "", email: "", phone: "", pickup: "", drop: "", date: "", time: "", cabTypeId: "" });
           }}
         >
