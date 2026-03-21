@@ -1,0 +1,114 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Destination {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String    @db.Text
+  region      String    // "North India", "South India", "East India", "West India"
+  image       String
+  featured    Boolean   @default(false)
+  packages    Package[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Package {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  destinationId String
+  price         Float
+  duration      String
+  groupSize     String
+  category      String      // "adventure", "religious", "honeymoon", "family", "wildlife", "beach"
+  itinerary     Json        // Array of { day: number, title: string, description: string }
+  inclusions    String[]
+  exclusions    String[]
+  images        String[]
+  featured      Boolean     @default(false)
+  bookings      Booking[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model CabType {
+  id          String       @id @default(cuid())
+  name        String
+  description String       @db.Text
+  pricePerKm  Float
+  image       String
+  capacity    Int
+  cabBookings CabBooking[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  referenceNo String        @unique
+  package     Package       @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  packageId   String
+  name        String
+  email       String
+  phone       String
+  travelers   Int
+  date        DateTime
+  notes       String?       @db.Text
+  status      BookingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model CabBooking {
+  id          String        @id @default(cuid())
+  referenceNo String        @unique
+  cabType     CabType       @relation(fields: [cabTypeId], references: [id], onDelete: Cascade)
+  cabTypeId   String
+  name        String
+  email       String
+  phone       String
+  pickup      String
+  drop        String
+  date        DateTime
+  time        String
+  status      BookingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  avatar    String?
+  rating    Int      // 1-5
+  review    String   @db.Text
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
