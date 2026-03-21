@@ -259,7 +259,7 @@ export function BookingForm({ packageId }: BookingFormProps) {
       </Button>
 
       <p className="text-center text-xs text-muted-foreground">
-        Free cancellation up to 7 days before departure. We'll confirm within 24 hours.
+        Free cancellation up to 7 days before departure. We&apos;ll confirm within 24 hours.
       </p>
     </form>
   );

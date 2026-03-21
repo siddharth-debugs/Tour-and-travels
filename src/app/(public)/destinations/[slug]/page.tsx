@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { motion } from "framer-motion";
 import { ChevronRight, MapPin, Package } from "lucide-react";
 import { db } from "@/lib/db";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -14,12 +13,7 @@ interface DestinationDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  const destinations = await db.destination.findMany({
-    select: { slug: true },
-  });
-  return destinations.map((d) => ({ slug: d.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

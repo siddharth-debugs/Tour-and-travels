@@ -1,15 +1,15 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Car, Users, MapPin, ChevronRight, Fuel } from "lucide-react";
 import { db } from "@/lib/db";
 import { SITE_CONFIG } from "@/lib/constants";
-import { formatPrice } from "@/lib/utils";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CabBookingForm } from "./cab-booking-form";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `Cab Services — ${SITE_CONFIG.name}`,
@@ -54,7 +54,7 @@ export default async function CabsPage() {
         <div className="max-w-7xl mx-auto">
           {cabTypes.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {cabTypes.map((cab, index) => (
+              {cabTypes.map((cab) => (
                 <div
                   key={cab.id}
                   className="group relative rounded-2xl overflow-hidden bg-card border border-border/60 shadow-sm hover:shadow-xl hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"

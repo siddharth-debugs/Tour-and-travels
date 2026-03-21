@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 const FROM_EMAIL = "WanderQuest <onboarding@resend.dev>"; // Replace with custom domain later
 
@@ -25,7 +27,7 @@ interface CabBookingEmailData {
 }
 
 export async function sendBookingConfirmation(data: BookingEmailData) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: data.customerEmail,
     subject: `Booking Confirmed — ${data.referenceNo} | WanderQuest`,
@@ -52,7 +54,7 @@ export async function sendBookingAlertToAdmin(data: BookingEmailData) {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!adminEmail) return;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: adminEmail,
     subject: `New Booking: ${data.referenceNo} — ${data.packageTitle}`,
@@ -71,7 +73,7 @@ export async function sendBookingAlertToAdmin(data: BookingEmailData) {
 }
 
 export async function sendCabBookingConfirmation(data: CabBookingEmailData) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: data.customerEmail,
     subject: `Cab Booking Confirmed — ${data.referenceNo} | WanderQuest`,
@@ -99,7 +101,7 @@ export async function sendCabBookingAlertToAdmin(data: CabBookingEmailData) {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!adminEmail) return;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: adminEmail,
     subject: `New Cab Booking: ${data.referenceNo}`,
@@ -130,7 +132,7 @@ export async function sendStatusUpdate(
     CANCELLED: "Your booking has been cancelled. If this was a mistake, please contact us.",
   };
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: customerEmail,
     subject: `Booking ${newStatus} — ${referenceNo} | WanderQuest`,
@@ -157,7 +159,7 @@ export async function sendInquiryAlert(data: {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!adminEmail) return;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: adminEmail,
     subject: `New Inquiry from ${data.name} | WanderQuest`,

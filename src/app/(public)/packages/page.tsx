@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Package, SlidersHorizontal } from "lucide-react";
 import { PackagesFilterBar } from "./packages-filter-bar";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `Tour Packages — ${SITE_CONFIG.name}`,

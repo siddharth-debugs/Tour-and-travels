@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { BookingForm } from "./booking-form";
 
+export const dynamic = "force-dynamic";
+
 interface BookingPageProps {
   params: Promise<{ packageId: string }>;
 }
@@ -81,7 +83,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
             Complete Your Booking
           </h1>
           <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-            Fill in your details below and we'll confirm your reservation within 24 hours.
+            Fill in your details below and we&apos;ll confirm your reservation within 24 hours.
           </p>
         </div>
 

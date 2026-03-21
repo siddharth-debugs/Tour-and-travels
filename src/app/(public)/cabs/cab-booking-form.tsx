@@ -89,7 +89,7 @@ export function CabBookingForm({ cabTypes }: CabBookingFormProps) {
           </div>
         )}
         <p className="text-muted-foreground max-w-sm">
-          Thank you! Our team will confirm your cab booking within 2 hours. We'll reach out on{" "}
+          Thank you! Our team will confirm your cab booking within 2 hours. We&apos;ll reach out on{" "}
           <span className="font-medium text-foreground">{form.email}</span>.
         </p>
         <Button

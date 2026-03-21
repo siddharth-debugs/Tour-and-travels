@@ -51,6 +51,7 @@ function AddTestimonialDialog() {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<TestimonialFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(testimonialSchema) as any,
     defaultValues: {
       name: "",
@@ -92,6 +93,7 @@ function AddTestimonialDialog() {
             Fill in the details to add a new testimonial.
           </DialogDescription>
         </DialogHeader>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <form onSubmit={form.handleSubmit(handleAdd as any)} className="space-y-4">
           <TestimonialFormFields form={form} />
           <DialogFooter>
@@ -113,6 +115,7 @@ function EditTestimonialDialog({ testimonial }: { testimonial: Testimonial }) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<TestimonialFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(testimonialSchema) as any,
     defaultValues: {
       name: testimonial.name,
@@ -151,6 +154,7 @@ function EditTestimonialDialog({ testimonial }: { testimonial: Testimonial }) {
           <DialogTitle>Edit Testimonial</DialogTitle>
           <DialogDescription>Update the testimonial details.</DialogDescription>
         </DialogHeader>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <form onSubmit={form.handleSubmit(handleEdit as any)} className="space-y-4">
           <TestimonialFormFields form={form} />
           <DialogFooter>

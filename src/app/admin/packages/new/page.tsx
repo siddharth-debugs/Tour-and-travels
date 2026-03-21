@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { PackageForm } from "../_components/package-form";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewPackagePage() {
   const destinations = await db.destination.findMany({
     orderBy: { name: "asc" },

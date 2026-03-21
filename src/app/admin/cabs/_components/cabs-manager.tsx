@@ -41,6 +41,7 @@ function AddCabDialog() {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<CabTypeFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(cabTypeSchema) as any,
     defaultValues: { name: "", description: "", pricePerKm: 0, capacity: 1, image: "" },
   });
@@ -75,6 +76,7 @@ function AddCabDialog() {
             Fill in the details to create a new cab type.
           </DialogDescription>
         </DialogHeader>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <form onSubmit={form.handleSubmit(handleAdd as any)} className="space-y-4">
           <CabTypeFormFields form={form} />
           <DialogFooter>
@@ -96,6 +98,7 @@ function EditCabDialog({ cab }: { cab: CabType }) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<CabTypeFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(cabTypeSchema) as any,
     defaultValues: {
       name: cab.name,
@@ -133,6 +136,7 @@ function EditCabDialog({ cab }: { cab: CabType }) {
           <DialogTitle>Edit Cab Type</DialogTitle>
           <DialogDescription>Update the cab type details.</DialogDescription>
         </DialogHeader>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <form onSubmit={form.handleSubmit(handleEdit as any)} className="space-y-4">
           <CabTypeFormFields form={form} />
           <DialogFooter>

@@ -41,8 +41,8 @@ export function DestinationForm({ mode, destinationId, defaultValues }: Props) {
     setValue,
     watch,
     formState: { errors },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useForm<DestinationFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(destinationSchema) as any,
     defaultValues: {
       name: defaultValues?.name ?? "",

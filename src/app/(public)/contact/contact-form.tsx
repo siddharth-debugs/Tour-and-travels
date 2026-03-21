@@ -61,7 +61,7 @@ export function ContactForm() {
         </div>
         <h3 className="text-xl font-bold text-foreground">Message Sent!</h3>
         <p className="text-muted-foreground max-w-sm">
-          Thank you for reaching out, {form.name}! We'll get back to you at{" "}
+          Thank you for reaching out, {form.name}! We&apos;ll get back to you at{" "}
           <span className="font-medium text-foreground">{form.email}</span> within 24 hours.
         </p>
         <Button

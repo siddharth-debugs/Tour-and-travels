@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: SITE_CONFIG.description,
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const [destinations, packages, testimonials] = await Promise.all([

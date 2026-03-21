@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Shield, Clock, Users, Heart, Award, Target, Eye } from "lucide-react";
+import { Shield, Users, Heart, Award, Target, Eye } from "lucide-react";
 import { SITE_CONFIG, STATS } from "@/lib/constants";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { StatsCounter } from "@/components/shared/stats-counter";
@@ -214,9 +214,9 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-2xl font-bold text-foreground mb-4">Our Vision</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  To become India's most trusted travel companion — a company where every
+                  To become India&apos;s most trusted travel companion — a company where every
                   traveler feels seen, heard, and cared for from the moment they start planning
-                  to the moment they arrive home with stories they'll tell for generations.
+                  to the moment they arrive home with stories they&apos;ll tell for generations.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   We envision a world where authentic travel bridges cultures, fosters empathy,
@@ -277,8 +277,8 @@ export default function AboutPage() {
             Your Next Adventure <br className="hidden sm:block" /> Awaits
           </h2>
           <p className="text-lg text-white/75 max-w-xl mx-auto mb-8">
-            Whether you're dreaming of snowy peaks, golden deserts, or tropical shores —
-            we'll craft the perfect trip for you.
+            Whether you&apos;re dreaming of snowy peaks, golden deserts, or tropical shores —
+            we&apos;ll craft the perfect trip for you.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

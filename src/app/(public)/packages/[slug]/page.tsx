@@ -28,12 +28,7 @@ interface ItineraryDay {
   description: string;
 }
 
-export async function generateStaticParams() {
-  const packages = await db.package.findMany({
-    select: { slug: true },
-  });
-  return packages.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -242,7 +237,7 @@ export default async function PackageDetailPage({
               {(pkg.inclusions.length > 0 || pkg.exclusions.length > 0) && (
                 <div>
                   <h2 className="text-xl font-bold text-foreground mb-5">
-                    What's Included
+                    What&apos;s Included
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Inclusions */}

@@ -54,8 +54,8 @@ export function PackageForm({ mode, packageId, destinations, defaultValues }: Pr
     watch,
     control,
     formState: { errors },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useForm<PackageFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(packageFormSchema) as any,
     defaultValues: {
       title: defaultValues?.title ?? "",

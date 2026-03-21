@@ -7,7 +7,7 @@ import { TourCard } from "@/components/shared/tour-card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `Explore Destinations — ${SITE_CONFIG.name}`,
