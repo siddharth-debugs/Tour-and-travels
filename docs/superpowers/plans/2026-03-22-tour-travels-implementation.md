@@ -188,7 +188,36 @@ Replace `src/app/globals.css` with the full theme. The key is using HSL values a
 }
 ```
 
-- [ ] **Step 6: Create `.env.example`**
+- [ ] **Step 6: Configure Next.js for external images**
+
+Update `next.config.ts` (created by scaffolding):
+
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+This must be done in Task 1 — external images are used from Task 8 onwards.
+
+- [ ] **Step 7: Delete scaffolded default page**
+
+Remove the default `src/app/page.tsx` created by `create-next-app` to avoid routing conflicts with the `(public)` route group:
+
+```bash
+rm src/app/page.tsx
+```
+
+- [ ] **Step 8: Create `.env.example`**
 
 ```bash
 # Database (Neon)
@@ -216,7 +245,7 @@ NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
 Copy to `.env.local` (gitignored) for local dev.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 git add -A
@@ -991,13 +1020,26 @@ export function formatDate(date: Date): string {
 }
 
 export async function generateReferenceNo(
-  prefix: string = "WQ"
+  prefix: string = "WQ",
+  lastReferenceNo?: string | null
 ): Promise<string> {
   const now = new Date();
   const yearMonth = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
-  const random = String(Math.floor(Math.random() * 99999)).padStart(5, "0");
-  return `${prefix}-${yearMonth}-${random}`;
+  let counter = 1;
+
+  if (lastReferenceNo) {
+    const parts = lastReferenceNo.split("-");
+    const lastYearMonth = parts[1];
+    if (lastYearMonth === yearMonth) {
+      counter = parseInt(parts[2], 10) + 1;
+    }
+  }
+
+  return `${prefix}-${yearMonth}-${String(counter).padStart(5, "0")}`;
 }
+// Usage in server actions: query last booking of current month to get lastReferenceNo
+// const lastBooking = await db.booking.findFirst({ orderBy: { createdAt: "desc" }, select: { referenceNo: true } });
+// const refNo = await generateReferenceNo("WQ", lastBooking?.referenceNo);
 
 export function slugify(text: string): string {
   return text
@@ -1147,7 +1189,85 @@ export const contactSchema = z.object({
 export type ContactFormData = z.infer<typeof contactSchema>;
 ```
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Create admin validation schemas**
+
+Create `src/lib/validations/destination.ts`:
+
+```typescript
+import { z } from "zod";
+import { REGIONS } from "@/lib/constants";
+
+export const destinationSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  description: z.string().min(20, "Description must be at least 20 characters"),
+  region: z.enum(REGIONS as unknown as [string, ...string[]], { message: "Select a valid region" }),
+  image: z.string().url("Valid image URL required"),
+  featured: z.boolean().default(false),
+});
+
+export type DestinationFormData = z.infer<typeof destinationSchema>;
+```
+
+Create `src/lib/validations/package-form.ts`:
+
+```typescript
+import { z } from "zod";
+
+export const packageFormSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  destinationId: z.string().min(1, "Destination is required"),
+  price: z.coerce.number().positive("Price must be positive"),
+  duration: z.string().min(1, "Duration is required"),
+  groupSize: z.string().min(1, "Group size is required"),
+  category: z.string().min(1, "Category is required"),
+  itinerary: z.array(z.object({
+    day: z.number(),
+    title: z.string().min(1),
+    description: z.string().min(1),
+  })).min(1, "At least 1 day required"),
+  inclusions: z.array(z.string()).min(1, "At least 1 inclusion required"),
+  exclusions: z.array(z.string()),
+  images: z.array(z.string().url()).min(1, "At least 1 image required"),
+  featured: z.boolean().default(false),
+});
+
+export type PackageFormData = z.infer<typeof packageFormSchema>;
+```
+
+Create `src/lib/validations/cab-type.ts`:
+
+```typescript
+import { z } from "zod";
+
+export const cabTypeSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  pricePerKm: z.coerce.number().positive("Price must be positive"),
+  capacity: z.coerce.number().int().min(1, "Capacity must be at least 1"),
+  image: z.string().url("Valid image URL required"),
+});
+
+export type CabTypeFormData = z.infer<typeof cabTypeSchema>;
+```
+
+Create `src/lib/validations/testimonial.ts`:
+
+```typescript
+import { z } from "zod";
+
+export const testimonialSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  location: z.string().min(2, "Location is required"),
+  rating: z.coerce.number().int().min(1).max(5),
+  review: z.string().min(10, "Review must be at least 10 characters"),
+  avatar: z.string().url().optional().or(z.literal("")),
+  featured: z.boolean().default(false),
+});
+
+export type TestimonialFormData = z.infer<typeof testimonialSchema>;
+```
+
+- [ ] **Step 5: Commit**
 
 ```bash
 git add src/lib/
@@ -2053,11 +2173,128 @@ export function SearchBar({ destinations }: { destinations: Destination[] }) {
 }
 ```
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 9: Create DataTable component**
+
+Create `src/components/shared/data-table.tsx` — a reusable table wrapper using `@tanstack/react-table`. Accepts columns definition and data array as props. Includes:
+- Sortable column headers
+- Pagination controls (previous/next, page indicator)
+- Optional search/filter input
+- Uses Shadcn `Table`, `Button`, `Input` components
+
+```typescript
+// src/components/shared/data-table.tsx
+"use client";
+
+import { useState } from "react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  useReactTable,
+  SortingState,
+  ColumnFiltersState,
+} from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  searchKey?: string;
+  searchPlaceholder?: string;
+}
+
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  searchKey,
+  searchPlaceholder = "Search...",
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    state: { sorting, columnFilters },
+  });
+
+  return (
+    <div>
+      {searchKey && (
+        <div className="flex items-center py-4">
+          <Input
+            placeholder={searchPlaceholder}
+            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+            onChange={(e) => table.getColumn(searchKey)?.setFilterValue(e.target.value)}
+            className="max-w-sm"
+          />
+        </div>
+      )}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          Previous
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+This component is reused across all admin pages (Tasks 16-20).
+
+- [ ] **Step 10: Commit**
 
 ```bash
 git add src/components/shared/
-git commit -m "feat: add all shared components — TourCard, StatsCounter, Carousel, Gallery, etc."
+git commit -m "feat: add all shared components — TourCard, StatsCounter, Carousel, Gallery, DataTable, etc."
 ```
 
 ---
@@ -2216,7 +2453,7 @@ git commit -m "feat: add packages list and detail pages with filters, itinerary,
 
 - [ ] **Step 1: Create Cabs page**
 
-Fetch all cab types from DB. Display as cards (image, name, capacity, price/km). Below cards: inline cab booking form using React Hook Form + Zod (`cabBookingSchema`). Form submits via Server Action (created in Phase 3).
+Fetch all cab types from DB. Display as cards (image, name, capacity, price/km). Below cards: build the cab booking form UI using React Hook Form + Zod (`cabBookingSchema`) with a placeholder `onSubmit` that shows a toast "Booking submitted!" (the real Server Action is wired in Task 14).
 
 - [ ] **Step 2: Create About page**
 
@@ -2228,7 +2465,7 @@ Static content page with:
 
 - [ ] **Step 3: Create Contact page**
 
-Contact form (React Hook Form + Zod `contactSchema`). Google Maps embed (iframe with placeholder coordinates). Contact info from `SITE_CONFIG`. Form submits via Server Action.
+Contact form (React Hook Form + Zod `contactSchema`). Google Maps embed (iframe with placeholder coordinates). Contact info from `SITE_CONFIG`. Form UI only — placeholder `onSubmit` with success toast. Server Action wired in Task 14.
 
 - [ ] **Step 4: Commit**
 
@@ -2755,29 +2992,11 @@ git commit -m "feat: add sitemap, robots.txt, error pages, and root SEO metadata
 ### Task 22: Final Polish
 
 **Files:**
-- Create: `next.config.ts` (update for images)
 - Create: `CLAUDE.md`
 
-- [ ] **Step 1: Configure Next.js for external images**
+Note: `next.config.ts` image configuration was already done in Task 1 Step 6.
 
-Update `next.config.ts`:
-
-```typescript
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "res.cloudinary.com" },
-    ],
-  },
-};
-
-export default nextConfig;
-```
-
-- [ ] **Step 2: Build and fix any errors**
+- [ ] **Step 1: Build and fix any errors**
 
 ```bash
 npm run build
@@ -2785,11 +3004,11 @@ npm run build
 
 Fix any TypeScript errors, missing imports, or build failures.
 
-- [ ] **Step 3: Create CLAUDE.md**
+- [ ] **Step 2: Create CLAUDE.md**
 
 Create `CLAUDE.md` at project root with build commands, architecture overview, and dev workflow info.
 
-- [ ] **Step 4: Final commit**
+- [ ] **Step 3: Final commit**
 
 ```bash
 git add -A
