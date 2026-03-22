@@ -71,6 +71,7 @@ export function Header() {
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
           <Button
+            nativeButton={false}
             render={<Link href="/packages" />}
             size="sm"
             className="font-semibold px-5"
@@ -124,6 +125,7 @@ export function Header() {
                 ))}
                 <div className="mt-4 px-1">
                   <Button
+                    nativeButton={false}
                     render={<Link href="/packages" onClick={() => setMobileOpen(false)} />}
                     className="w-full font-semibold"
                   >

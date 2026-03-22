@@ -34,7 +34,7 @@ export default async function AdminDestinationsPage() {
             Manage travel destinations ({destinations.length} total)
           </p>
         </div>
-        <Button render={<Link href="/admin/destinations/new" />}>
+        <Button nativeButton={false} render={<Link href="/admin/destinations/new" />}>
           <PlusCircle className="mr-2 size-4" />
           Add Destination
         </Button>
@@ -108,6 +108,7 @@ export default async function AdminDestinationsPage() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
+                            nativeButton={false}
                             render={<Link href={`/admin/destinations/${dest.id}/edit`} />}
                           >
                             <Pencil className="size-4" />

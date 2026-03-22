@@ -34,7 +34,7 @@ export default async function AdminPackagesPage() {
             Manage tour packages ({packages.length} total)
           </p>
         </div>
-        <Button render={<Link href="/admin/packages/new" />}>
+        <Button nativeButton={false} render={<Link href="/admin/packages/new" />}>
           <PlusCircle className="mr-2 size-4" />
           Add Package
         </Button>
@@ -103,6 +103,7 @@ export default async function AdminPackagesPage() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
+                            nativeButton={false}
                             render={<Link href={`/admin/packages/${pkg.id}/edit`} />}
                           >
                             <Pencil className="size-4" />

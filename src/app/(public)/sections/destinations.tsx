@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { TourCard } from "@/components/shared/tour-card";
@@ -45,14 +45,20 @@ export function DestinationsSection({ destinations }: DestinationsSectionProps) 
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 text-muted-foreground">
-            <p>No destinations available yet. Check back soon!</p>
+          <div className="flex flex-col items-center justify-center py-20 px-4">
+            <div className="flex items-center justify-center size-24 rounded-3xl bg-primary/10 mb-6">
+              <MapPin className="size-12 text-primary/60" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Destinations Coming Soon</h3>
+            <p className="text-muted-foreground text-center max-w-sm leading-relaxed">
+              We&apos;re curating incredible destinations across India. Check back soon for breathtaking locations!
+            </p>
           </div>
         )}
 
         {/* View All CTA */}
         <div className="mt-12 flex justify-center">
-          <Button render={<Link href="/destinations" />} variant="outline" size="lg" className="group gap-2 font-semibold">
+          <Button nativeButton={false} render={<Link href="/destinations" />} variant="outline" size="lg" className="group gap-2 font-semibold">
             View All Destinations
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Button>

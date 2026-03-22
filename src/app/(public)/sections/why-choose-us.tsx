@@ -45,18 +45,20 @@ const cardVariants: Variants = {
 
 export function WhyChooseUs() {
   return (
-    <section className="py-24 px-4 sm:px-6 bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-foreground overflow-hidden relative">
+    <section className="py-24 px-4 sm:px-6 text-primary-foreground overflow-hidden relative" style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.85) 40%, hsl(25 95% 38%) 100%)" }}>
       {/* Decorative background pattern */}
       <div
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)",
-          backgroundSize: "32px 32px",
+            "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+          backgroundSize: "28px 28px",
         }}
       />
-      <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 blur-3xl -translate-y-1/2 translate-x-1/3" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-black/10 blur-3xl translate-y-1/2 -translate-x-1/3" />
+      {/* Decorative glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" style={{ background: "rgba(255,255,255,0.07)" }} />
+      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" style={{ background: "rgba(0,0,0,0.15)" }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-3xl" style={{ background: "rgba(255,255,255,0.04)" }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Heading — override colors for white text */}

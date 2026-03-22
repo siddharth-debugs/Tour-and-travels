@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { TestimonialCarousel } from "@/components/shared/testimonial-carousel";
 
@@ -34,8 +35,14 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
             }))}
           />
         ) : (
-          <div className="text-center py-16 text-muted-foreground">
-            <p>No testimonials available yet.</p>
+          <div className="flex flex-col items-center justify-center py-20 px-4">
+            <div className="flex items-center justify-center size-24 rounded-3xl bg-primary/10 mb-6">
+              <Star className="size-12 text-primary/60" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Reviews Coming Soon</h3>
+            <p className="text-muted-foreground text-center max-w-sm leading-relaxed">
+              Our travelers are out exploring! Be the first to share your WanderQuest experience.
+            </p>
           </div>
         )}
       </div>

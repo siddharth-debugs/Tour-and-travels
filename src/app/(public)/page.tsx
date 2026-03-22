@@ -15,26 +15,38 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+type DestinationWithCount = Awaited<ReturnType<typeof db.destination.findMany<{ include: { _count: { select: { packages: true } } } }>>>;
+type PackageWithDestination = Awaited<ReturnType<typeof db.package.findMany<{ include: { destination: { select: { name: true } } } }>>>;
+type TestimonialItem = Awaited<ReturnType<typeof db.testimonial.findMany>>;
+
 export default async function HomePage() {
-  const [destinations, packages, testimonials] = await Promise.all([
-    db.destination.findMany({
-      where: { featured: true },
-      take: 6,
-      orderBy: { createdAt: "desc" },
-      include: { _count: { select: { packages: true } } },
-    }),
-    db.package.findMany({
-      where: { featured: true },
-      take: 8,
-      orderBy: { createdAt: "desc" },
-      include: { destination: { select: { name: true } } },
-    }),
-    db.testimonial.findMany({
-      where: { featured: true },
-      take: 6,
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+  let destinations: DestinationWithCount = [];
+  let packages: PackageWithDestination = [];
+  let testimonials: TestimonialItem = [];
+
+  try {
+    [destinations, packages, testimonials] = await Promise.all([
+      db.destination.findMany({
+        where: { featured: true },
+        take: 6,
+        orderBy: { createdAt: "desc" },
+        include: { _count: { select: { packages: true } } },
+      }),
+      db.package.findMany({
+        where: { featured: true },
+        take: 8,
+        orderBy: { createdAt: "desc" },
+        include: { destination: { select: { name: true } } },
+      }),
+      db.testimonial.findMany({
+        where: { featured: true },
+        take: 6,
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
+  } catch {
+    // Database not connected yet — render with empty data
+  }
 
   return (
     <>

@@ -101,6 +101,7 @@ export function HeroSection({ destinations }: HeroSectionProps) {
           className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4"
         >
           <Button
+            nativeButton={false}
             render={<Link href="/packages" />}
             size="lg"
             className="h-12 px-8 text-base font-semibold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all duration-200"
@@ -108,6 +109,7 @@ export function HeroSection({ destinations }: HeroSectionProps) {
             Explore Packages
           </Button>
           <Button
+            nativeButton={false}
             render={<Link href="/destinations" />}
             variant="outline"
             size="lg"

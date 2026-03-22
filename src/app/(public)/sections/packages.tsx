@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -75,13 +75,19 @@ export function PackagesSection({ packages }: PackagesSectionProps) {
             </Carousel>
           </div>
         ) : (
-          <div className="text-center py-16 text-muted-foreground">
-            <p>No packages available yet. Check back soon!</p>
+          <div className="flex flex-col items-center justify-center py-20 px-4">
+            <div className="flex items-center justify-center size-24 rounded-3xl bg-primary/10 mb-6">
+              <Compass className="size-12 text-primary/60" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Packages Coming Soon</h3>
+            <p className="text-muted-foreground text-center max-w-sm leading-relaxed">
+              Our travel experts are crafting handpicked tour packages. Amazing adventures await — stay tuned!
+            </p>
           </div>
         )}
 
         <div className="mt-10 flex justify-center">
-          <Button render={<Link href="/packages" />} variant="default" size="lg" className="group gap-2 font-semibold">
+          <Button nativeButton={false} render={<Link href="/packages" />} variant="default" size="lg" className="group gap-2 font-semibold">
             Browse All Packages
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Button>

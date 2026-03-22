@@ -88,6 +88,7 @@ export function CabsCTA() {
             transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
           >
             <Button
+              nativeButton={false}
               render={<Link href="/cabs" />}
               size="lg"
               className="h-13 px-8 text-base font-semibold gap-2 group shadow-lg shadow-primary/40 hover:shadow-primary/60 hover:-translate-y-0.5 transition-all duration-200"
