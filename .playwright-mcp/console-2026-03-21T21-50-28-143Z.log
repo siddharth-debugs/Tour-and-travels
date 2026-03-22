@@ -1,0 +1,4 @@
+[   12913ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at Header (webpack-internal:///(app-pages-browser)/./src/components/layout/header.tsx:119:106)
+    at PublicLayout (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/layout.tsx?18:15:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56

@@ -1,0 +1,24 @@
+[    4056ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at Header (webpack-internal:///(app-pages-browser)/./src/components/layout/header.tsx:119:106)
+    at PublicLayout (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/layout.tsx?18:15:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[    4065ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at HeroSection (webpack-internal:///(app-pages-browser)/./src/app/(public)/sections/hero.tsx:139:104)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/page.tsx?46:84:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[    4070ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at HeroSection (webpack-internal:///(app-pages-browser)/./src/app/(public)/sections/hero.tsx:155:104)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/page.tsx?46:84:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[    4082ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at DestinationsSection (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/sections/destinations.tsx?63:75:106)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/page.tsx?56:91:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[    4091ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at PackagesSection (webpack-internal:///(app-pages-browser)/./src/app/(public)/sections/packages.tsx:123:106)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/page.tsx?47:98:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[    4094ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./src/components/ui/button.tsx:42:87)
+    at CabsCTA (webpack-internal:///(app-pages-browser)/./src/app/(public)/sections/cabs-cta.tsx:206:114)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./src/app/(public)/page.tsx?55:117:88) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
