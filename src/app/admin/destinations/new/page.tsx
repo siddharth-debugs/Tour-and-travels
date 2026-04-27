@@ -1,14 +1,18 @@
+import { AdminPageHeader } from "@/components/admin/page-header";
 import { DestinationForm } from "../_components/destination-form";
 
 export default function NewDestinationPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Add Destination</h1>
-        <p className="text-sm text-muted-foreground">
-          Create a new travel destination
-        </p>
-      </div>
+    <div className="mx-auto max-w-4xl space-y-5">
+      <AdminPageHeader
+        title="New Destination"
+        description="Add a new travel destination."
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Destinations", href: "/admin/destinations" },
+          { label: "New" },
+        ]}
+      />
       <DestinationForm mode="create" />
     </div>
   );

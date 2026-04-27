@@ -13,40 +13,48 @@ async function requireAuth() {
   }
 }
 
+function paths() {
+  revalidatePath("/admin/destinations");
+  revalidatePath("/destinations");
+}
+
 export async function createDestination(data: unknown) {
   await requireAuth();
-
   const parsed = destinationSchema.safeParse(data);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0].message };
   }
-
-  const { name, description, region, image, featured } = parsed.data;
-  const slug = slugify(name);
-
+  const d = parsed.data;
+  const slug = slugify(d.name);
   const existing = await db.destination.findUnique({ where: { slug } });
   const finalSlug = existing ? `${slug}-${Date.now()}` : slug;
 
   await db.destination.create({
-    data: { name, slug: finalSlug, description, region, image, featured },
+    data: {
+      name: d.name,
+      slug: finalSlug,
+      description: d.description,
+      region: d.region,
+      image: d.image,
+      featured: d.featured,
+      metaTitle: d.metaTitle,
+      metaDescription: d.metaDescription,
+      metaKeywords: d.metaKeywords,
+      ogImage: d.ogImage,
+    },
   });
-
-  revalidatePath("/admin/destinations");
-  revalidatePath("/destinations");
+  paths();
   return { success: true };
 }
 
 export async function updateDestination(id: string, data: unknown) {
   await requireAuth();
-
   const parsed = destinationSchema.safeParse(data);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0].message };
   }
-
-  const { name, description, region, image, featured } = parsed.data;
-  const slug = slugify(name);
-
+  const d = parsed.data;
+  const slug = slugify(d.name);
   const existing = await db.destination.findFirst({
     where: { slug, NOT: { id } },
   });
@@ -54,20 +62,26 @@ export async function updateDestination(id: string, data: unknown) {
 
   await db.destination.update({
     where: { id },
-    data: { name, slug: finalSlug, description, region, image, featured },
+    data: {
+      name: d.name,
+      slug: finalSlug,
+      description: d.description,
+      region: d.region,
+      image: d.image,
+      featured: d.featured,
+      metaTitle: d.metaTitle,
+      metaDescription: d.metaDescription,
+      metaKeywords: d.metaKeywords,
+      ogImage: d.ogImage,
+    },
   });
-
-  revalidatePath("/admin/destinations");
-  revalidatePath("/destinations");
+  paths();
   return { success: true };
 }
 
 export async function deleteDestination(id: string) {
   await requireAuth();
-
   await db.destination.delete({ where: { id } });
-
-  revalidatePath("/admin/destinations");
-  revalidatePath("/destinations");
+  paths();
   return { success: true };
 }

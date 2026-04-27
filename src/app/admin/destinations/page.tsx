@@ -2,7 +2,8 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { AdminPageHeader } from "@/components/admin/page-header";
 import {
   Table,
   TableBody,
@@ -27,23 +28,25 @@ export default async function AdminDestinationsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Destinations</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage travel destinations ({destinations.length} total)
-          </p>
-        </div>
-        <Button nativeButton={false} render={<Link href="/admin/destinations/new" />}>
-          <PlusCircle className="mr-2 size-4" />
-          Add Destination
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="Destinations"
+        description={`Manage travel destinations (${destinations.length} total).`}
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Destinations" },
+        ]}
+        actions={
+          <Button
+            nativeButton={false}
+            render={<Link href="/admin/destinations/new" />}
+          >
+            <PlusCircle className="mr-2 size-4" />
+            New Destination
+          </Button>
+        }
+      />
 
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">All Destinations</CardTitle>
-        </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>

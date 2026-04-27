@@ -42,20 +42,29 @@ export async function generateMetadata({
       duration: true,
       images: true,
       destination: { select: { name: true } },
+      metaTitle: true,
+      metaDescription: true,
+      metaKeywords: true,
+      ogImage: true,
     },
   });
 
   if (!pkg) return { title: "Package Not Found" };
 
+  const title = pkg.metaTitle ?? `${pkg.title} — ${SITE_CONFIG.name}`;
+  const description =
+    pkg.metaDescription ??
+    `${pkg.title} in ${pkg.destination.name}. ${pkg.duration} tour package starting from ${formatPrice(pkg.price)} per person.`;
+  const ogImage = pkg.ogImage ?? pkg.images[0];
+
   return {
-    title: `${pkg.title} — ${SITE_CONFIG.name}`,
-    description: `${pkg.title} in ${pkg.destination.name}. ${pkg.duration} tour package starting from ${formatPrice(pkg.price)} per person.`,
+    title,
+    description,
+    keywords: pkg.metaKeywords ?? undefined,
     openGraph: {
-      title: `${pkg.title} — ${SITE_CONFIG.name}`,
-      description: `Explore ${pkg.title} — ${pkg.duration} in ${pkg.destination.name} from ${formatPrice(pkg.price)}/person.`,
-      images: pkg.images[0]
-        ? [{ url: pkg.images[0], alt: pkg.title }]
-        : [],
+      title,
+      description,
+      images: ogImage ? [{ url: ogImage, alt: pkg.title }] : [],
       siteName: SITE_CONFIG.name,
     },
   };

@@ -8,36 +8,76 @@ datasource db {
 }
 
 model Destination {
-  id          String    @id @default(cuid())
-  name        String
-  slug        String    @unique
-  description String    @db.Text
-  region      String    // "North India", "South India", "East India", "West India"
-  image       String
-  featured    Boolean   @default(false)
-  packages    Package[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String       @id @default(cuid())
+  name            String
+  slug            String       @unique
+  description     String       @db.Text
+  region          String
+  image           String
+  featured        Boolean      @default(false)
+  // SEO
+  metaTitle       String?
+  metaDescription String?      @db.Text
+  metaKeywords    String?
+  ogImage         String?
+  packages        Package[]
+  collections     Collection[] @relation("CollectionDestinations")
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 model Package {
-  id            String      @id @default(cuid())
-  title         String
-  slug          String      @unique
-  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  destinationId String
-  price         Float
-  duration      String
-  groupSize     String
-  category      String      // "adventure", "religious", "honeymoon", "family", "wildlife", "beach"
-  itinerary     Json        // Array of { day: number, title: string, description: string }
-  inclusions    String[]
-  exclusions    String[]
-  images        String[]
-  featured      Boolean     @default(false)
-  bookings      Booking[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id              String       @id @default(cuid())
+  title           String
+  slug            String       @unique
+  destination     Destination  @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  destinationId   String
+  price           Float
+  duration        String
+  groupSize       String
+  category        String
+  itinerary       Json
+  inclusions      String[]
+  exclusions      String[]
+  images          String[]
+  featured        Boolean      @default(false)
+  // SEO
+  metaTitle       String?
+  metaDescription String?      @db.Text
+  metaKeywords    String?
+  ogImage         String?
+  bookings        Booking[]
+  collections     Collection[] @relation("CollectionPackages")
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Collection {
+  id              String         @id @default(cuid())
+  type            CollectionType
+  name            String
+  slug            String         @unique
+  tagline         String?
+  description     String?        @db.Text
+  content         String?        @db.Text
+  image           String?
+  showInNav       Boolean        @default(true)
+  featured        Boolean        @default(false)
+  order           Int            @default(0)
+  // SEO
+  metaTitle       String?
+  metaDescription String?        @db.Text
+  metaKeywords    String?
+  ogImage         String?
+  packages        Package[]      @relation("CollectionPackages")
+  destinations    Destination[]  @relation("CollectionDestinations")
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+enum CollectionType {
+  PACKAGE
+  DESTINATION
 }
 
 model CabType {
@@ -100,7 +140,7 @@ model Testimonial {
   name      String
   location  String
   avatar    String?
-  rating    Int      // 1-5
+  rating    Int
   review    String   @db.Text
   featured  Boolean  @default(false)
   createdAt DateTime @default(now())

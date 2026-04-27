@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { AdminPageHeader } from "@/components/admin/page-header";
 import { DestinationForm } from "../../_components/destination-form";
 
 export const dynamic = "force-dynamic";
@@ -15,23 +16,33 @@ export default async function EditDestinationPage({ params }: Props) {
   if (!destination) notFound();
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Edit Destination</h1>
-        <p className="text-sm text-muted-foreground">
-          Update details for{" "}
-          <span className="font-medium">{destination.name}</span>
-        </p>
-      </div>
+    <div className="mx-auto max-w-4xl space-y-5">
+      <AdminPageHeader
+        title={`Edit · ${destination.name}`}
+        description="Update content, SEO, and visibility for this destination."
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Destinations", href: "/admin/destinations" },
+          { label: destination.name },
+        ]}
+      />
       <DestinationForm
         mode="edit"
         destinationId={id}
         defaultValues={{
           name: destination.name,
           description: destination.description,
-          region: destination.region as "North India" | "South India" | "East India" | "West India",
+          region: destination.region as
+            | "North India"
+            | "South India"
+            | "East India"
+            | "West India",
           image: destination.image,
           featured: destination.featured,
+          metaTitle: destination.metaTitle ?? undefined,
+          metaDescription: destination.metaDescription ?? undefined,
+          metaKeywords: destination.metaKeywords ?? undefined,
+          ogImage: destination.ogImage ?? undefined,
         }}
       />
     </div>

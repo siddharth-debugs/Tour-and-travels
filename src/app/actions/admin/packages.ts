@@ -13,6 +13,11 @@ async function requireAuth() {
   }
 }
 
+function paths() {
+  revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+}
+
 export async function createPackage(data: unknown) {
   await requireAuth();
 
@@ -21,31 +26,33 @@ export async function createPackage(data: unknown) {
     return { success: false, error: parsed.error.issues[0].message };
   }
 
-  const { title, destinationId, price, duration, groupSize, category, itinerary, inclusions, exclusions, images, featured } = parsed.data;
-  const slug = slugify(title);
-
+  const d = parsed.data;
+  const slug = slugify(d.title);
   const existing = await db.package.findUnique({ where: { slug } });
   const finalSlug = existing ? `${slug}-${Date.now()}` : slug;
 
   await db.package.create({
     data: {
-      title,
+      title: d.title,
       slug: finalSlug,
-      destinationId,
-      price,
-      duration,
-      groupSize,
-      category,
-      itinerary,
-      inclusions,
-      exclusions,
-      images,
-      featured,
+      destinationId: d.destinationId,
+      price: d.price,
+      duration: d.duration,
+      groupSize: d.groupSize,
+      category: d.category,
+      itinerary: d.itinerary,
+      inclusions: d.inclusions,
+      exclusions: d.exclusions,
+      images: d.images,
+      featured: d.featured,
+      metaTitle: d.metaTitle,
+      metaDescription: d.metaDescription,
+      metaKeywords: d.metaKeywords,
+      ogImage: d.ogImage,
     },
   });
 
-  revalidatePath("/admin/packages");
-  revalidatePath("/packages");
+  paths();
   return { success: true };
 }
 
@@ -57,9 +64,8 @@ export async function updatePackage(id: string, data: unknown) {
     return { success: false, error: parsed.error.issues[0].message };
   }
 
-  const { title, destinationId, price, duration, groupSize, category, itinerary, inclusions, exclusions, images, featured } = parsed.data;
-  const slug = slugify(title);
-
+  const d = parsed.data;
+  const slug = slugify(d.title);
   const existing = await db.package.findFirst({
     where: { slug, NOT: { id } },
   });
@@ -68,32 +74,32 @@ export async function updatePackage(id: string, data: unknown) {
   await db.package.update({
     where: { id },
     data: {
-      title,
+      title: d.title,
       slug: finalSlug,
-      destinationId,
-      price,
-      duration,
-      groupSize,
-      category,
-      itinerary,
-      inclusions,
-      exclusions,
-      images,
-      featured,
+      destinationId: d.destinationId,
+      price: d.price,
+      duration: d.duration,
+      groupSize: d.groupSize,
+      category: d.category,
+      itinerary: d.itinerary,
+      inclusions: d.inclusions,
+      exclusions: d.exclusions,
+      images: d.images,
+      featured: d.featured,
+      metaTitle: d.metaTitle,
+      metaDescription: d.metaDescription,
+      metaKeywords: d.metaKeywords,
+      ogImage: d.ogImage,
     },
   });
 
-  revalidatePath("/admin/packages");
-  revalidatePath("/packages");
+  paths();
   return { success: true };
 }
 
 export async function deletePackage(id: string) {
   await requireAuth();
-
   await db.package.delete({ where: { id } });
-
-  revalidatePath("/admin/packages");
-  revalidatePath("/packages");
+  paths();
   return { success: true };
 }

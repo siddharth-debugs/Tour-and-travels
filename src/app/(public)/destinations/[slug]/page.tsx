@@ -21,20 +21,36 @@ export async function generateMetadata({
   const { slug } = await params;
   const destination = await db.destination.findUnique({
     where: { slug },
-    select: { name: true, description: true, image: true, region: true },
+    select: {
+      name: true,
+      description: true,
+      image: true,
+      region: true,
+      metaTitle: true,
+      metaDescription: true,
+      metaKeywords: true,
+      ogImage: true,
+    },
   });
 
   if (!destination) {
     return { title: "Destination Not Found" };
   }
 
+  const title =
+    destination.metaTitle ?? `${destination.name} — ${SITE_CONFIG.name}`;
+  const description =
+    destination.metaDescription ?? destination.description.slice(0, 160);
+  const ogImage = destination.ogImage ?? destination.image;
+
   return {
-    title: `${destination.name} — ${SITE_CONFIG.name}`,
-    description: destination.description.slice(0, 160),
+    title,
+    description,
+    keywords: destination.metaKeywords ?? undefined,
     openGraph: {
-      title: `${destination.name} — ${SITE_CONFIG.name}`,
-      description: destination.description.slice(0, 160),
-      images: [{ url: destination.image, alt: destination.name }],
+      title,
+      description,
+      images: [{ url: ogImage, alt: destination.name }],
       siteName: SITE_CONFIG.name,
     },
   };

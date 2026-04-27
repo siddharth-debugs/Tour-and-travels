@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { REGIONS } from "@/lib/constants";
 
 const optionalStr = z
   .string()
@@ -12,7 +11,7 @@ const optionalStr = z
 const optionalLongStr = z
   .string()
   .trim()
-  .max(2000)
+  .max(5000)
   .optional()
   .or(z.literal(""))
   .transform((v) => (v ? v : undefined));
@@ -22,18 +21,22 @@ const optionalUrl = z
   .optional()
   .transform((v) => (v ? v : undefined));
 
-export const destinationSchema = z.object({
+export const collectionSchema = z.object({
+  type: z.enum(["PACKAGE", "DESTINATION"]),
   name: z.string().min(2, "Name must be at least 2 characters"),
-  description: z.string().min(20, "Description must be at least 20 characters"),
-  region: z.enum(REGIONS as unknown as [string, ...string[]], {
-    message: "Select a valid region",
-  }),
-  image: z.string().url("Valid image URL required"),
+  tagline: optionalStr,
+  description: optionalLongStr,
+  content: optionalLongStr,
+  image: optionalUrl,
+  showInNav: z.boolean().default(true),
   featured: z.boolean().default(false),
+  order: z.coerce.number().int().min(0).default(0),
   metaTitle: optionalStr,
   metaDescription: optionalLongStr,
   metaKeywords: optionalStr,
   ogImage: optionalUrl,
+  packageIds: z.array(z.string()).default([]),
+  destinationIds: z.array(z.string()).default([]),
 });
 
-export type DestinationFormData = z.infer<typeof destinationSchema>;
+export type CollectionFormData = z.infer<typeof collectionSchema>;

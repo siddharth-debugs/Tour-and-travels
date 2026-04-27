@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, Pencil } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { AdminPageHeader } from "@/components/admin/page-header";
 import { PackageDeleteButton } from "./_components/package-delete-button";
 
 export const dynamic = "force-dynamic";
@@ -27,23 +28,25 @@ export default async function AdminPackagesPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Packages</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage tour packages ({packages.length} total)
-          </p>
-        </div>
-        <Button nativeButton={false} render={<Link href="/admin/packages/new" />}>
-          <PlusCircle className="mr-2 size-4" />
-          Add Package
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="Packages"
+        description={`Manage tour packages (${packages.length} total).`}
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Packages" },
+        ]}
+        actions={
+          <Button
+            nativeButton={false}
+            render={<Link href="/admin/packages/new" />}
+          >
+            <PlusCircle className="mr-2 size-4" />
+            New Package
+          </Button>
+        }
+      />
 
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">All Packages</CardTitle>
-        </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>

@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { AdminPageHeader } from "@/components/admin/page-header";
 import { PackageForm } from "../../_components/package-form";
 
 export const dynamic = "force-dynamic";
@@ -40,13 +41,16 @@ export default async function EditPackagePage({ params }: Props) {
   if (!pkg) notFound();
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Edit Package</h1>
-        <p className="text-sm text-muted-foreground">
-          Update details for <span className="font-medium">{pkg.title}</span>
-        </p>
-      </div>
+    <div className="mx-auto max-w-4xl space-y-5">
+      <AdminPageHeader
+        title={`Edit · ${pkg.title}`}
+        description="Update content, SEO, and visibility for this package."
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Packages", href: "/admin/packages" },
+          { label: pkg.title },
+        ]}
+      />
       <PackageForm
         mode="edit"
         packageId={id}
@@ -63,6 +67,10 @@ export default async function EditPackagePage({ params }: Props) {
           exclusions: pkg.exclusions,
           images: pkg.images,
           featured: pkg.featured,
+          metaTitle: pkg.metaTitle ?? undefined,
+          metaDescription: pkg.metaDescription ?? undefined,
+          metaKeywords: pkg.metaKeywords ?? undefined,
+          ogImage: pkg.ogImage ?? undefined,
         }}
       />
     </div>

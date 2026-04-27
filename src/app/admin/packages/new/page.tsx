@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { AdminPageHeader } from "@/components/admin/page-header";
 import { PackageForm } from "../_components/package-form";
 
 export const dynamic = "force-dynamic";
@@ -10,13 +11,16 @@ export default async function NewPackagePage() {
   });
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Add Package</h1>
-        <p className="text-sm text-muted-foreground">
-          Create a new tour package
-        </p>
-      </div>
+    <div className="mx-auto max-w-4xl space-y-5">
+      <AdminPageHeader
+        title="New Package"
+        description="Create a new tour package."
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Packages", href: "/admin/packages" },
+          { label: "New" },
+        ]}
+      />
       <PackageForm mode="create" destinations={destinations} />
     </div>
   );
